@@ -1,0 +1,15 @@
+server:
+  port: 8910
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_spiral_ai
+    username: huhailong
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: spiral-ai-manager
+#logging:
+#  level:
+#    com.zaxxer.hikari: debug
