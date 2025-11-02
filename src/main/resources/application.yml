@@ -10,6 +10,13 @@ spring:
       ddl-auto: update
   application:
     name: spiral-ai-manager
+app:
+  jwt:
+    secret: 63c99adb95c1e216dd0014cdd86ecab9 # md5: spiral-ai-manager-secret
+    expirationMs: 604800000 # 7 days in milliseconds
+  cors:
+    allowed-origins:
+      - http://localhost:3000
 #logging:
 #  level:
 #    com.zaxxer.hikari: debug
