@@ -1,5 +1,6 @@
 package com.hubianluanma.spiral_ai_manager.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class Permission {
 
     // 反向映射
     @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     // Getters and Setters

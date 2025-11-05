@@ -1,5 +1,6 @@
 package com.hubianluanma.spiral_ai_manager.controller;
 
+import com.hubianluanma.spiral_ai_manager.common.ApiResponse;
 import com.hubianluanma.spiral_ai_manager.security.config.CustomUserDetails;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,37 +28,37 @@ public class TestController {
     }
 
     @GetMapping("/me")
-    public Map<String, Object> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ApiResponse<Map<String, Object>> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Map<String, Object> result = new HashMap<>();
         result.put("username", userDetails.getUsername());
         result.put("roles", userDetails.getRoles());
         result.put("permissions", userDetails.getPermissions());
-        return result;
+        return ApiResponse.success(result);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
-    public String adminEndpoint() {
-        return "访问成功：Admin Endpoint";
+    public ApiResponse<String> adminEndpoint() {
+        return ApiResponse.success("访问成功：Admin Endpoint");
     }
 
     // 只有权限为 '用户查看' 可以访问
     @PreAuthorize("hasAuthority('用户查看')")
     @GetMapping("/user/view")
-    public String userViewEndpoint() {
-        return "访问成功：用户查看 Endpoint";
+    public ApiResponse<String> userViewEndpoint() {
+        return ApiResponse.success("访问成功：用户查看 Endpoint");
     }
 
     // 只有权限为 '用户编辑' 可以访问
     @PreAuthorize("hasAuthority('用户编辑')")
     @PostMapping("/user/edit")
-    public String userEditEndpoint() {
-        return "访问成功：用户编辑 Endpoint";
+    public ApiResponse<String> userEditEndpoint() {
+        return ApiResponse.success("访问成功：用户编辑 Endpoint");
     }
 
     // 所有人都能访问
     @GetMapping("/public")
-    public String publicEndpoint() {
-        return "访问成功：Public Endpoint";
+    public ApiResponse<String> publicEndpoint() {
+        return ApiResponse.success("访问成功：Public Endpoint");
     }
 }

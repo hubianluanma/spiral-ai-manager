@@ -7,9 +7,9 @@ package com.hubianluanma.spiral_ai_manager.security.api;
  * @date 2025/11/2 21:25
  */
 
+import com.hubianluanma.spiral_ai_manager.common.ApiResponse;
 import com.hubianluanma.spiral_ai_manager.security.dto.LoginRequest;
 import com.hubianluanma.spiral_ai_manager.security.jwt.JwtService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -34,17 +33,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest body) {
+    public ApiResponse<Map<String, Object>> login(@RequestBody LoginRequest body) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(body.username(), body.password())
         );
         // 如果未抛异常即认证成功
         String token = jwtService.generateToken(body.username());
-        return ResponseEntity.ok(Map.of("token", token));
+        return ApiResponse.success(Map.of("token", token), "Logged in successfully");
     }
 
-    public ResponseEntity<Map<String, String>> logout() {
+    public ApiResponse<Void> logout() {
         // 这里可以添加一些登出逻辑，比如记录日志等
-        return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
+        return ApiResponse.success(null, "Logged out successfully");
     }
 }

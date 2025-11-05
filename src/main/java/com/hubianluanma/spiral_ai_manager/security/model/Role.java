@@ -1,5 +1,6 @@
 package com.hubianluanma.spiral_ai_manager.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class Role {
 
     // 反向映射： 用户-角色关联
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     // Getters and Setters

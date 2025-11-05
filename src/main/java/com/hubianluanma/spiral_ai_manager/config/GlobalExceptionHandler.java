@@ -1,5 +1,6 @@
 package com.hubianluanma.spiral_ai_manager.config;
 
+import com.hubianluanma.spiral_ai_manager.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -27,17 +28,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleOtherExceptions(Exception ex) throws Exception {
+    public ApiResponse<Void> handleOtherExceptions(Exception ex) throws Exception {
         // 如果是 Spring Security 的认证/权限异常，不处理， 让 Spring Security 自己处理
         if (ex instanceof org.springframework.security.core.AuthenticationException ||
             ex instanceof org.springframework.security.access.AccessDeniedException) {
             throw ex;
         }
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of(
-                        "error", "Internal Server Error",
-                        "message", ex.getMessage()
-                ));
+        ex.printStackTrace();
+        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器异常");
     }
 }
