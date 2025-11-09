@@ -1,5 +1,6 @@
 package com.hubianluanma.spiral_ai_manager.security.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -26,6 +27,7 @@ public class Role {
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:dd")
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

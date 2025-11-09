@@ -1,6 +1,11 @@
 package com.hubianluanma.spiral_ai_manager.security.service;
 
+import com.hubianluanma.spiral_ai_manager.security.dto.UserCreateRequest;
+import com.hubianluanma.spiral_ai_manager.security.dto.UserSearchRequest;
+import com.hubianluanma.spiral_ai_manager.security.enums.CreateUserType;
 import com.hubianluanma.spiral_ai_manager.security.model.User;
+import com.hubianluanma.spiral_ai_manager.security.repository.UserSimpleProjection;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,5 +17,11 @@ import java.util.List;
  */
 public interface UserService {
 
-    List<User> getUserList();
+    Page<User> getUserList(UserSearchRequest searchRequest);
+
+    List<UserSimpleProjection> simpleList();
+
+    void createUser(UserCreateRequest userBody, CreateUserType createUserType);
+
+    void deleteUser(List<Long> userIdList);
 }

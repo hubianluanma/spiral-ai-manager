@@ -1,12 +1,13 @@
 package com.hubianluanma.spiral_ai_manager.security.api;
 
 import com.hubianluanma.spiral_ai_manager.common.ApiResponse;
+import com.hubianluanma.spiral_ai_manager.security.dto.UserSearchRequest;
 import com.hubianluanma.spiral_ai_manager.security.model.User;
+import com.hubianluanma.spiral_ai_manager.security.repository.UserSimpleProjection;
 import com.hubianluanma.spiral_ai_manager.security.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +29,19 @@ public class UserController {
 
     @GetMapping("/allList")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<List<User>> getAllUsers() {
-        return ApiResponse.success(userService.getUserList());
+    public ApiResponse<Page<User>> getAllUsers(UserSearchRequest request) {
+        return ApiResponse.success(userService.getUserList(request));
+    }
+
+    @GetMapping("/simpleList")
+    public ApiResponse<List<UserSimpleProjection>> simpleList() {
+        return ApiResponse.success(userService.simpleList());
+    }
+
+    @PostMapping("/deleteByIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<Void> deleteUserById(@RequestBody List<Long> ids) {
+        userService.deleteUser(ids);
+        return ApiResponse.success();
     }
 }

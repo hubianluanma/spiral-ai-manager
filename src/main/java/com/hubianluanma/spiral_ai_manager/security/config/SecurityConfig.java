@@ -1,5 +1,7 @@
 package com.hubianluanma.spiral_ai_manager.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hubianluanma.spiral_ai_manager.common.ApiResponse;
 import com.hubianluanma.spiral_ai_manager.security.jwt.JwtAuthenticationFilter;
 import com.hubianluanma.spiral_ai_manager.security.jwt.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -37,15 +40,17 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final ObjectMapper objectMapper;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JwtService jwtService) {
+    public SecurityConfig(UserDetailsService userDetailsService, JwtService jwtService, ObjectMapper objectMapper) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
+        this.objectMapper = objectMapper;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -60,7 +65,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable) // SPA + JWT 时通常禁用 CSRF
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/public/**").permitAll()
+                    .requestMatchers("/test/public/**").permitAll()
                     .requestMatchers("/ai/chat/**").permitAll()
                     .anyRequest().authenticated()
             )
@@ -69,12 +74,14 @@ public class SecurityConfig {
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json;charset=UTF-8");
-                    response.getWriter().write("{\"error\":\"Unauthorized\"}");
+                    String msg = objectMapper.writeValueAsString(ApiResponse.error(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
+                    response.getWriter().write(msg);
                 })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.setContentType("application/json;charset=UTF-8");
-                    response.getWriter().write("{\"error\":\"Forbidden\"}");
+                    String msg = objectMapper.writeValueAsString(ApiResponse.error(HttpServletResponse.SC_UNAUTHORIZED, accessDeniedException.getMessage()));
+                    response.getWriter().write(msg);
                 })
         );
         return http.build();
