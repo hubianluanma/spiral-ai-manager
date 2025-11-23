@@ -19,6 +19,7 @@ public enum ErrorCode {
     EMAIL_NOT_VERIFIED(1006, "邮箱未激活"),
     CONSTRAINT_USERNAME(1007, "用户名已存在"),
     CONSTRAINT_EMAIL(1008, "该邮箱已注册"),
+    CONSTRAINT_USER_ID(1008, "用户ID为空"),
 
     // 认证/权限
     UNAUTHORIZED(2001, "未认证，请先登录"),

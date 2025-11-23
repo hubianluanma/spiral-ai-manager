@@ -7,4 +7,4 @@ package com.hubianluanma.spiral_ai_manager.security.dto;
  * @param email Email address used for sending activation mail.
  * @param nickname User-defined display name.
  */
-public record UserCreateRequest(String username, String password, String email, String nickname) {}
+public record UserCreateRequest(Long id, String username, String password, String email, String nickname) {}

@@ -52,4 +52,16 @@ public class UserValidator {
             throw new ValidationException(ErrorCode.INVALID_NICKNAME);
         }
     }
+
+    public static void validateUser(String username, String email, String nickname) {
+        if (!isValidUsername(username)) {
+            throw new ValidationException(ErrorCode.INVALID_USERNAME);
+        }
+        if (!isValidEmail(email)) {
+            throw new ValidationException(ErrorCode.INVALID_EMAIL);
+        }
+        if (!isValidNickname(nickname)) {
+            throw new ValidationException(ErrorCode.INVALID_NICKNAME);
+        }
+    }
 }

@@ -1,7 +1,9 @@
 package com.hubianluanma.spiral_ai_manager.security.api;
 
 import com.hubianluanma.spiral_ai_manager.common.ApiResponse;
+import com.hubianluanma.spiral_ai_manager.security.dto.UserCreateRequest;
 import com.hubianluanma.spiral_ai_manager.security.dto.UserSearchRequest;
+import com.hubianluanma.spiral_ai_manager.security.enums.CreateUserType;
 import com.hubianluanma.spiral_ai_manager.security.model.User;
 import com.hubianluanma.spiral_ai_manager.security.repository.UserSimpleProjection;
 import com.hubianluanma.spiral_ai_manager.security.service.UserService;
@@ -27,7 +29,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/allList")
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<Page<User>> createUser(@RequestBody UserCreateRequest userBody) {
+        userService.createUser(userBody, CreateUserType.ADMIN_CREATED);
+        return ApiResponse.success();
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<Page<User>> updateUser(@RequestBody UserCreateRequest userBody) {
+        userService.updateUser(userBody);
+        return ApiResponse.success();
+    }
+
+    @GetMapping("/page")
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<Page<User>> getAllUsers(UserSearchRequest request) {
         return ApiResponse.success(userService.getUserList(request));

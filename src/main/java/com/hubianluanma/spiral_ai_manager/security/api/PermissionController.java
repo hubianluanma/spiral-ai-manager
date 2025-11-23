@@ -30,7 +30,7 @@ public class PermissionController {
         return ApiResponse.success();
     }
 
-    @DeleteMapping
+    @PostMapping("/deleteByIds")
     public ApiResponse<Void> deletePermission(@RequestBody List<Long> ids) {
         permissionRepository.deleteAllById(ids);
         return ApiResponse.success();

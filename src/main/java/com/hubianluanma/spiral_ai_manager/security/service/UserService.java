@@ -23,5 +23,7 @@ public interface UserService {
 
     void createUser(UserCreateRequest userBody, CreateUserType createUserType);
 
+    void updateUser(UserCreateRequest userBody);
+
     void deleteUser(List<Long> userIdList);
 }

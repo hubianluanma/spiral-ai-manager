@@ -78,6 +78,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUser(UserCreateRequest userBody) {
+        if (userBody.id() == null) {
+            throw new ValidationException(ErrorCode.CONSTRAINT_USER_ID);
+        }
+        UserValidator.validateUser(userBody.username(), userBody.email(), userBody.nickname());
+        User updateUser = userRepository.getReferenceById(userBody.id());
+        updateUser.setUsername(userBody.username());
+        updateUser.setNickname(userBody.nickname());
+        updateUser.setEmail(userBody.email());  // TODO: 暂时实现修改，后期需要考虑更改后激活验证修改后的邮箱
+        userRepository.save(updateUser);
+    }
+
+    @Override
     public void deleteUser(List<Long> userIdList) {
         userRepository.deleteAllById(userIdList);
     }

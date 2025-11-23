@@ -29,7 +29,7 @@ public class RoleController {
         return ApiResponse.success();
     }
 
-    @DeleteMapping
+    @PostMapping("/deleteByIds")
     public ApiResponse<Void> deleteRole(@RequestBody List<Long> ids) {
         roleRepository.deleteAllById(ids);
         return ApiResponse.success();
