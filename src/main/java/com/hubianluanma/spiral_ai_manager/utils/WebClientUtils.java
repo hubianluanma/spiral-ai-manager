@@ -1,5 +1,6 @@
 package com.hubianluanma.spiral_ai_manager.utils;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -93,10 +94,11 @@ public class WebClientUtils {
     /**
      * SSE 流式请求
      **/
-    public Flux<String> sse(String uri, Object requestBody) {
+    public Flux<String> sse(String uri, Object requestBody, String key) {
         return webClient.post()
                 .uri(uri)
                 .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + key)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()

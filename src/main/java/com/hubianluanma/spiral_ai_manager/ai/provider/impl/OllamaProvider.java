@@ -31,6 +31,6 @@ public class OllamaProvider implements AIProvider {
                 "messages", request.getMessages(),
                 "stream", request.isStream(),
                 "think", request.isThink()
-        ));
+        ), "");
     }
 }
